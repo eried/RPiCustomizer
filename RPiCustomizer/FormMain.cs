@@ -40,13 +40,16 @@ namespace RPICustomizer
             if (lanIp != null)
             {
                 var result = Parallel.ForEach(getIps(lanIp),
-                                              new ParallelOptions { MaxDegreeOfParallelism = Settings.Default.MaxDegreeOfParallelism },
-                                              ip => {
-                                                  if (IsPortOpen(ip, Settings.Default.DefaultPort))
-                                                        {
-                                                            backgroundWorkerScanner.ReportProgress(-1, ip);
-                                                        }
-                                              });
+                    new ParallelOptions { MaxDegreeOfParallelism = Settings.Default.MaxDegreeOfParallelism },
+                    ip => {
+                        if (IsPortOpen(ip, Settings.Default.DefaultPort))
+                            backgroundWorkerScanner.ReportProgress(-1, ip);
+                    });
+
+                // Check parallel process result
+                if (result.IsCompleted)
+                {
+                }
             }
         }
 
@@ -120,7 +123,7 @@ namespace RPICustomizer
         private void backgroundWorkerScanner_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var ip = (IPAddress) e.UserState;
-            listViewDevices.Items.Add(new ListViewItem((ip).ToString()) {Tag = ip});
+            listViewDevices.Items.Add(new ListViewItem((ip).ToString(),0) {Tag = ip});
         }
 
         private void listViewDevices_DoubleClick(object sender, EventArgs e)

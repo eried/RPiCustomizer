@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.listViewDevices = new System.Windows.Forms.ListView();
             this.backgroundWorkerScanner = new System.ComponentModel.BackgroundWorker();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarMain = new System.Windows.Forms.ToolStripProgressBar();
+            this.imageListIcons = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,10 +44,12 @@
             this.listViewDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewDevices.LargeImageList = this.imageListIcons;
             this.listViewDevices.Location = new System.Drawing.Point(12, 12);
             this.listViewDevices.MultiSelect = false;
             this.listViewDevices.Name = "listViewDevices";
             this.listViewDevices.Size = new System.Drawing.Size(392, 312);
+            this.listViewDevices.SmallImageList = this.imageListIcons;
             this.listViewDevices.TabIndex = 0;
             this.listViewDevices.UseCompatibleStateImageBehavior = false;
             this.listViewDevices.View = System.Windows.Forms.View.Tile;
@@ -82,6 +87,12 @@
             this.toolStripProgressBarMain.Size = new System.Drawing.Size(100, 16);
             this.toolStripProgressBarMain.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
+            // imageListIcons
+            // 
+            this.imageListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListIcons.ImageStream")));
+            this.imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListIcons.Images.SetKeyName(0, "Device-Removable-icon.png");
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,6 +100,7 @@
             this.ClientSize = new System.Drawing.Size(416, 355);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.listViewDevices);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
             this.Text = "RPiC: Browser";
             this.Load += new System.EventHandler(this.FormMain_Load);
@@ -106,6 +118,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMain;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarMain;
+        private System.Windows.Forms.ImageList imageListIcons;
     }
 }
 
