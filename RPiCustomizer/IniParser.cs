@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 
@@ -100,6 +101,15 @@ namespace CarPlateMonitor
             sectionPair.Key = settingName;
 
             return (String)keyPairs[sectionPair];
+        }
+
+        public IEnumerable<string> GetSections()
+        {
+            var o = new HashSet<String>();
+            foreach (SectionPair p in keyPairs.Keys)
+                if (!o.Contains(p.Section))
+                    o.Add(p.Section);
+            return o;
         }
 
         /// <summary>

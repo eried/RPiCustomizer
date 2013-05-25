@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using CarPlateMonitor;
 using RPICustomizer.Properties;
 using Renci.SshNet;
 
@@ -22,7 +23,27 @@ namespace RPICustomizer
             InitializeComponent();
             backgroundWorkerConnect.RunWorkerAsync();
 
-            //GenerateGui(tabControlMain, "");
+            Utilities.GenerateGui(tabControlMain, new IniParser(@"C:\Users\Erwin\SkyDrive\Personales\vWorker\Current\Raspberry Jon\bin\matriculas\settings.ini"));
+        }
+    }
+
+    public class Utilities
+    {
+        public static void GenerateGui(TabControl tabControlMain, IniParser ini)
+        {
+            var s = ini.GetSections().ToList();
+            s.Sort();
+
+            tabControlMain.Controls.Add(new TabPage(GetPrettyName("Main")));
+            foreach (var section in s)
+            {
+                tabControlMain.Controls.Add(new TabPage(GetPrettyName(section)));
+            }
+        }
+
+        private static string GetPrettyName(string p)
+        {
+            return p;
         }
     }
 }
