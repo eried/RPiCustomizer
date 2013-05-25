@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Collections;
+using System.Text;
+using RPICustomizer.Properties;
 
 namespace CarPlateMonitor
 {
@@ -10,8 +12,8 @@ namespace CarPlateMonitor
     /// </summary>
     public class IniParser
     {
-        private Hashtable keyPairs = new Hashtable();
-        private String iniFilePath;
+        private readonly Dictionary<SectionPair, String> _keyPairs = new Dictionary<SectionPair, string>();
+        private readonly String _iniFilePath;
 
         private struct SectionPair
         {
@@ -30,13 +32,13 @@ namespace CarPlateMonitor
             String currentRoot = null;
             String[] keyPair = null;
 
-            iniFilePath = iniPath;
+            _iniFilePath = iniPath;
 
             if (File.Exists(iniPath))
             {
                 try
                 {
-                    iniFile = new StreamReader(iniPath);
+                    iniFile = new StreamReader(iniPath, Encoding.Default);
 
                     strLine = iniFile.ReadLine();
 
@@ -58,7 +60,7 @@ namespace CarPlateMonitor
                                 String value = null;
 
                                 if (currentRoot == null)
-                                    currentRoot = "ROOT";
+                                    currentRoot = Resources.IniParser_RootSection;
 
                                 sectionPair.Section = currentRoot;
                                 sectionPair.Key = keyPair[0];
@@ -66,7 +68,7 @@ namespace CarPlateMonitor
                                 if (keyPair.Length > 1)
                                     value = keyPair[1];
 
-                                keyPairs.Add(sectionPair, value);
+                                _keyPairs.Add(sectionPair, value);
                             }
                         }
 
@@ -100,13 +102,13 @@ namespace CarPlateMonitor
             sectionPair.Section = sectionName;
             sectionPair.Key = settingName;
 
-            return (String)keyPairs[sectionPair];
+            return (String)_keyPairs[sectionPair];
         }
 
         public IEnumerable<string> GetSections()
         {
-            var o = new HashSet<String>();
-            foreach (SectionPair p in keyPairs.Keys)
+            var o = new List<String>();
+            foreach (var p in _keyPairs.Keys)
                 if (!o.Contains(p.Section))
                     o.Add(p.Section);
             return o;
@@ -120,7 +122,7 @@ namespace CarPlateMonitor
         {
             ArrayList tmpArray = new ArrayList();
 
-            foreach (SectionPair pair in keyPairs.Keys)
+            foreach (SectionPair pair in _keyPairs.Keys)
             {
                 if (pair.Section == sectionName)
                     tmpArray.Add(pair.Key);
@@ -141,10 +143,10 @@ namespace CarPlateMonitor
             sectionPair.Section = sectionName;
             sectionPair.Key = settingName;
 
-            if (keyPairs.ContainsKey(sectionPair))
-                keyPairs.Remove(sectionPair);
+            if (_keyPairs.ContainsKey(sectionPair))
+                _keyPairs.Remove(sectionPair);
 
-            keyPairs.Add(sectionPair, settingValue);
+            _keyPairs.Add(sectionPair, settingValue);
         }
 
         /// <summary>
@@ -168,8 +170,8 @@ namespace CarPlateMonitor
             sectionPair.Section = sectionName;
             sectionPair.Key = settingName;
 
-            if (keyPairs.ContainsKey(sectionPair))
-                keyPairs.Remove(sectionPair);
+            if (_keyPairs.ContainsKey(sectionPair))
+                _keyPairs.Remove(sectionPair);
         }
 
         /// <summary>
@@ -182,7 +184,7 @@ namespace CarPlateMonitor
             String tmpValue = "";
             String strToSave = "";
 
-            foreach (SectionPair sectionPair in keyPairs.Keys)
+            foreach (SectionPair sectionPair in _keyPairs.Keys)
             {
                 if (!sections.Contains(sectionPair.Section))
                     sections.Add(sectionPair.Section);
@@ -192,11 +194,11 @@ namespace CarPlateMonitor
             {
                 strToSave += ("[" + section + "]\r\n");
 
-                foreach (SectionPair sectionPair in keyPairs.Keys)
+                foreach (SectionPair sectionPair in _keyPairs.Keys)
                 {
                     if (sectionPair.Section == section)
                     {
-                        tmpValue = (String)keyPairs[sectionPair];
+                        tmpValue = (String)_keyPairs[sectionPair];
 
                         if (tmpValue != null)
                             tmpValue = "=" + tmpValue;
@@ -225,7 +227,7 @@ namespace CarPlateMonitor
         /// </summary>
         public void SaveSettings()
         {
-            SaveSettings(iniFilePath);
+            SaveSettings(_iniFilePath);
         }
     }
 }
