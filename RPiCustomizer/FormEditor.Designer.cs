@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEditor));
             this.backgroundWorkerConnect = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,19 +47,12 @@
             this.rebootToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.openWithSystemEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControlMain
-            // 
-            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControlMain.Location = new System.Drawing.Point(12, 27);
-            this.tabControlMain.Name = "tabControlMain";
-            this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(535, 429);
-            this.tabControlMain.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -68,13 +62,15 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(559, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(404, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openWithSystemEditorToolStripMenuItem,
+            this.toolStripMenuItem4,
             this.saveToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -86,24 +82,26 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.saveToolStripMenuItem.Text = "&Save in remote device";
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.exportToolStripMenuItem.Text = "&Export...";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(113, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(226, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.quitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.quitToolStripMenuItem.Text = "&Close";
             // 
             // remoteToolStripMenuItem
@@ -123,41 +121,41 @@
             // statusToolStripMenuItem
             // 
             this.statusToolStripMenuItem.Name = "statusToolStripMenuItem";
-            this.statusToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.statusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.statusToolStripMenuItem.Text = "Status";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(134, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
             // 
             // stopServiceToolStripMenuItem
             // 
             this.stopServiceToolStripMenuItem.Name = "stopServiceToolStripMenuItem";
-            this.stopServiceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.stopServiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.stopServiceToolStripMenuItem.Text = "S&top service";
             // 
             // startServiceToolStripMenuItem
             // 
             this.startServiceToolStripMenuItem.Name = "startServiceToolStripMenuItem";
-            this.startServiceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.startServiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startServiceToolStripMenuItem.Text = "&Start service";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(134, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
             // 
             // shutdownToolStripMenuItem
             // 
             this.shutdownToolStripMenuItem.Name = "shutdownToolStripMenuItem";
-            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.shutdownToolStripMenuItem.Text = "&Shutdown";
             // 
             // rebootToolStripMenuItem
             // 
             this.rebootToolStripMenuItem.Name = "rebootToolStripMenuItem";
-            this.rebootToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.rebootToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rebootToolStripMenuItem.Text = "Reboot";
             // 
             // helpToolStripMenuItem
@@ -171,16 +169,41 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.aboutToolStripMenuItem.Text = "&About";
+            // 
+            // tabControlMain
+            // 
+            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControlMain.Location = new System.Drawing.Point(12, 27);
+            this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.SelectedIndex = 0;
+            this.tabControlMain.Size = new System.Drawing.Size(380, 275);
+            this.tabControlMain.TabIndex = 0;
+            // 
+            // openWithSystemEditorToolStripMenuItem
+            // 
+            this.openWithSystemEditorToolStripMenuItem.Name = "openWithSystemEditorToolStripMenuItem";
+            this.openWithSystemEditorToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.openWithSystemEditorToolStripMenuItem.Text = "Open with default editor";
+            this.openWithSystemEditorToolStripMenuItem.Click += new System.EventHandler(this.openWithSystemEditorToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(226, 6);
             // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(559, 468);
+            this.ClientSize = new System.Drawing.Size(404, 314);
             this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormEditor";
             this.Text = "RPiC: Editor";
@@ -193,7 +216,6 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControlMain;
         private System.ComponentModel.BackgroundWorker backgroundWorkerConnect;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -211,5 +233,9 @@
         private System.Windows.Forms.ToolStripMenuItem shutdownToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControlMain;
+        private System.Windows.Forms.ToolTip toolTipInfo;
+        private System.Windows.Forms.ToolStripMenuItem openWithSystemEditorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
     }
 }
