@@ -31,11 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.listViewDevices = new System.Windows.Forms.ListView();
+            this.imageListIcons = new System.Windows.Forms.ImageList(this.components);
             this.backgroundWorkerScanner = new System.ComponentModel.BackgroundWorker();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarMain = new System.Windows.Forms.ToolStripProgressBar();
-            this.imageListIcons = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,12 +48,18 @@
             this.listViewDevices.Location = new System.Drawing.Point(12, 12);
             this.listViewDevices.MultiSelect = false;
             this.listViewDevices.Name = "listViewDevices";
-            this.listViewDevices.Size = new System.Drawing.Size(392, 312);
+            this.listViewDevices.Size = new System.Drawing.Size(488, 178);
             this.listViewDevices.SmallImageList = this.imageListIcons;
             this.listViewDevices.TabIndex = 0;
             this.listViewDevices.UseCompatibleStateImageBehavior = false;
             this.listViewDevices.View = System.Windows.Forms.View.Tile;
             this.listViewDevices.DoubleClick += new System.EventHandler(this.listViewDevices_DoubleClick);
+            // 
+            // imageListIcons
+            // 
+            this.imageListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListIcons.ImageStream")));
+            this.imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListIcons.Images.SetKeyName(0, "Device-Removable-icon.png");
             // 
             // backgroundWorkerScanner
             // 
@@ -67,9 +73,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMain,
             this.toolStripProgressBarMain});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 333);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 199);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(416, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(512, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -87,22 +93,16 @@
             this.toolStripProgressBarMain.Size = new System.Drawing.Size(100, 16);
             this.toolStripProgressBarMain.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
-            // imageListIcons
-            // 
-            this.imageListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListIcons.ImageStream")));
-            this.imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListIcons.Images.SetKeyName(0, "Device-Removable-icon.png");
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 355);
+            this.ClientSize = new System.Drawing.Size(512, 221);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.listViewDevices);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormMain";
-            this.Text = "RPiC: Browser";
+            this.Text = "RPiC Browser";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

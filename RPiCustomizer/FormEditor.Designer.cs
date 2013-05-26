@@ -33,6 +33,8 @@
             this.backgroundWorkerConnect = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openWithSystemEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -49,8 +51,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain = new System.Windows.Forms.TabControl();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
-            this.openWithSystemEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,6 +78,18 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // openWithSystemEditorToolStripMenuItem
+            // 
+            this.openWithSystemEditorToolStripMenuItem.Name = "openWithSystemEditorToolStripMenuItem";
+            this.openWithSystemEditorToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.openWithSystemEditorToolStripMenuItem.Text = "Open with default editor";
+            this.openWithSystemEditorToolStripMenuItem.Click += new System.EventHandler(this.openWithSystemEditorToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(226, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -121,41 +133,41 @@
             // statusToolStripMenuItem
             // 
             this.statusToolStripMenuItem.Name = "statusToolStripMenuItem";
-            this.statusToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.statusToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.statusToolStripMenuItem.Text = "Status";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(134, 6);
             // 
             // stopServiceToolStripMenuItem
             // 
             this.stopServiceToolStripMenuItem.Name = "stopServiceToolStripMenuItem";
-            this.stopServiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopServiceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.stopServiceToolStripMenuItem.Text = "S&top service";
             // 
             // startServiceToolStripMenuItem
             // 
             this.startServiceToolStripMenuItem.Name = "startServiceToolStripMenuItem";
-            this.startServiceToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startServiceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.startServiceToolStripMenuItem.Text = "&Start service";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(134, 6);
             // 
             // shutdownToolStripMenuItem
             // 
             this.shutdownToolStripMenuItem.Name = "shutdownToolStripMenuItem";
-            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.shutdownToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.shutdownToolStripMenuItem.Text = "&Shutdown";
             // 
             // rebootToolStripMenuItem
             // 
             this.rebootToolStripMenuItem.Name = "rebootToolStripMenuItem";
-            this.rebootToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.rebootToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.rebootToolStripMenuItem.Text = "Reboot";
             // 
             // helpToolStripMenuItem
@@ -170,7 +182,7 @@
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             // 
             // tabControlMain
@@ -184,18 +196,6 @@
             this.tabControlMain.Size = new System.Drawing.Size(380, 275);
             this.tabControlMain.TabIndex = 0;
             // 
-            // openWithSystemEditorToolStripMenuItem
-            // 
-            this.openWithSystemEditorToolStripMenuItem.Name = "openWithSystemEditorToolStripMenuItem";
-            this.openWithSystemEditorToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-            this.openWithSystemEditorToolStripMenuItem.Text = "Open with default editor";
-            this.openWithSystemEditorToolStripMenuItem.Click += new System.EventHandler(this.openWithSystemEditorToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(226, 6);
-            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,7 +206,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormEditor";
-            this.Text = "RPiC: Editor";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "RPiC Editor";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);

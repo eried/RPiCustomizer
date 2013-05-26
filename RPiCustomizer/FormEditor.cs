@@ -24,6 +24,8 @@ namespace RPICustomizer
         public FormEditor(SshClient connection)
         {
             InitializeComponent();
+            Text = connection.ConnectionInfo.Host + " - "+ Text;
+            
             backgroundWorkerConnect.RunWorkerAsync();
 
             ini = @"C:\Users\Erwin\SkyDrive\Personales\vWorker\Current\Raspberry Jon\bin\matriculas\settings.ini";
@@ -179,6 +181,11 @@ namespace RPICustomizer
             if (tmp.Length > 0)
                 return tmp.Substring(0, 1).ToUpper() + tmp.Substring(1);
             return p;
+        }
+
+        internal static string AppendIp(string Text, string ip, int port=-1)
+        {
+            return Text + " (" + ip + (port!=-1?":" + port:"") +")";
         }
     }
 }

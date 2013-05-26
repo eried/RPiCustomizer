@@ -20,6 +20,8 @@ namespace RPICustomizer
         {
             _ip = ip;
             InitializeComponent();
+            labelStatus.Text = labelStatus.Text.Replace("%d",String.Join(".", ip.GetAddressBytes()) + ":" + Settings.Default.DefaultPort);
+
             backgroundWorkerConnect.RunWorkerAsync();
         }
 
@@ -52,13 +54,23 @@ namespace RPICustomizer
 
         private void FormConnector_FormClosed(object sender, FormClosedEventArgs e)
         {
-            DialogResult = Connection != null && Connection.IsConnected ? DialogResult.OK : DialogResult.Cancel;
-            
             if (Connection != null && Connection.IsConnected)
             {
-                Connection.Disconnect();
-                Connection.Dispose();
-                Connection = null;
+                DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                try
+                {
+                    Connection.Disconnect();
+                    Connection.Dispose();
+                    Connection = null;
+                }
+                catch
+                {
+                }
+
+                DialogResult = DialogResult.Cancel;
             }
         }
     }
