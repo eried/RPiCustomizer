@@ -1,5 +1,3 @@
-Raspberry Pi Customizer
-=
 The purpose of this utility is to allow easy and quick external customization for your Raspberry Pi project. 
 
 How it works?
@@ -8,11 +6,13 @@ The application uses a combination of bash scripts (remote operations) and INI f
 
 ### Scanning available devices
 The scanning happens in the background based on the settings specified in the application. Available remote devices will appear iconified in the browser:
+
 ![alt text](https://raw.github.com/eried/RPiCustomizer/master/README/browser_0.1_001.png "Browser")
 
 
 ### Configuration
 The editor generates a GUI for any provided INI file by the initialization script:
+
 ![alt text](https://raw.github.com/eried/RPiCustomizer/master/README/editor_0.1_001.png "Editor")
 
 
@@ -71,4 +71,5 @@ service_response=yes
 Remote commands
 -
 Additionally to the configuration, the Remote menu can include customized actions.
+
 ![alt text](https://raw.github.com/eried/RPiCustomizer/master/README/remote_0.1_001.png "Remote")
