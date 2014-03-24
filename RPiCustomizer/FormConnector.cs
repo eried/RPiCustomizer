@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -32,10 +33,20 @@ namespace RPICustomizer
             try
             {
                 Connection = new SshClient(_ip.ToString(), Settings.Default.DefaultPort, "pi", "raspberry");
-
                 Connection.Connect();
-                var c = Connection.RunCommand("cat /home/pi/mono/matriculas/settings.ini");
+
+                var c = Connection.RunCommand("cat /boot/customizer.txt");
                 c.Execute();
+
+                if (String.IsNullOrEmpty(c.Error))
+                {
+                    Configuration = c.Result;
+                }
+                else
+                {
+                    e.Result = c.Error;
+                    Connection.Disconnect();
+                }
             }
             catch
             {
@@ -62,6 +73,7 @@ namespace RPICustomizer
             {
                 try
                 {
+                    MessageBox.Show("Can't connect to the device", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Connection.Disconnect();
                     Connection.Dispose();
                     Connection = null;
@@ -73,6 +85,8 @@ namespace RPICustomizer
                 DialogResult = DialogResult.Cancel;
             }
         }
+
+        public string Configuration { get; set; }
     }
 }
     
