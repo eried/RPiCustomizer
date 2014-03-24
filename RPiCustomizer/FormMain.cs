@@ -133,7 +133,7 @@ namespace RPICustomizer
             {
                 var f = new FormConnector((IPAddress) c[0].Tag);
                 if (f.ShowDialog() == DialogResult.OK)
-                    new FormEditor(f.Connection).ShowDialog();
+                    new FormEditor(f.Configuration, f.Connection).ShowDialog();
             }
         }
 

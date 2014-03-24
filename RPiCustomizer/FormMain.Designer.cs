@@ -59,7 +59,7 @@
             // 
             this.imageListIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListIcons.ImageStream")));
             this.imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListIcons.Images.SetKeyName(0, "Device-Removable-icon.png");
+            this.imageListIcons.Images.SetKeyName(0, "Categories-settings-icon.png");
             // 
             // backgroundWorkerScanner
             // 
@@ -82,7 +82,7 @@
             // toolStripStatusLabelMain
             // 
             this.toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
-            this.toolStripStatusLabelMain.Size = new System.Drawing.Size(299, 17);
+            this.toolStripStatusLabelMain.Size = new System.Drawing.Size(364, 17);
             this.toolStripStatusLabelMain.Spring = true;
             this.toolStripStatusLabelMain.Text = "Looking for devices...";
             this.toolStripStatusLabelMain.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
