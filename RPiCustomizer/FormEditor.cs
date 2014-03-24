@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using CarPlateMonitor;
 using RPICustomizer.Properties;
 using Renci.SshNet;
 
@@ -17,78 +17,97 @@ namespace RPICustomizer
 {
     public partial class FormEditor : Form
     {
+        private readonly SshClient _connection;
         private readonly IPAddress _ip;
         private FormConnector _loader;
-        private string ini;
+        private IniParser commands;
+        private IniParser config;
+        private bool _dirty;
 
-        public FormEditor(SshClient connection)
+        public FormEditor(String configuration, SshClient connection)
         {
+            _connection = connection;
             InitializeComponent();
             Text = connection.ConnectionInfo.Host + " - "+ Text;
             
-            backgroundWorkerConnect.RunWorkerAsync();
-
-            ini = @"C:\Users\Erwin\SkyDrive\Personales\vWorker\Current\Raspberry Jon\bin\matriculas\settings.ini";
-            Utilities.GenerateGui(tabControlMain,toolTipInfo, new IniParser(ini));
+            backgroundWorkerConnect.RunWorkerAsync(configuration);
         }
 
         private void openWithSystemEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(ini);
+            Process.Start(config.ConfigurationFile);
         }
-    }
 
-    public class Utilities
-    {
-        public static void GenerateGui(TabControl tabControlMain, ToolTip toolTipInfo, IniParser ini)
+        private void backgroundWorkerConnect_DoWork(object sender, DoWorkEventArgs e)
         {
-            var s = ini.GetSections().ToList();
+            commands = new IniParser((String)e.Argument,true);
+
+            var c = _connection.RunCommand(commands.GetSetting("config", "get"));
+            c.Execute();
+            config = new IniParser(c.Result,true);
+        }
+
+        private void backgroundWorkerConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (config != null)
+            {
+                GenerateGui();
+                //labelWait.Visible = false;
+                tabControlMain.Visible = true;
+            }
+        }
+
+        private void GenerateGui()
+        {
+            var s = config.GetSections().ToList();
             s.Sort();
 
             foreach (var section in s)
             {
-                var page = new TabPage(GetPrettyName(section));
-                var panel = new TableLayoutPanel { Dock = DockStyle.Fill,ColumnCount = 2 };
+                var page = new TabPage(Utilities.GetPrettyName(section));
+                var panel = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2 };
                 var lastComment = "";
                 var i = 0;
 
-                foreach (var option in ini.EnumSection(section))
+                foreach (var option in config.EnumSection(section))
                 {
 
                     if (!new[] { "#", ";", "//" }.Any(c => option.StartsWith(c)))
                     {
                         var l = new Label
-                                    {
-                                        Text = GetPrettyName(option) + ":",
-                                        TextAlign = ContentAlignment.MiddleLeft,
-                                        //Width = tabControlMain.Width/4,
-                                        AutoEllipsis = true
-                                    };
+                        {
+                            Text = Utilities.GetPrettyName(option) + ":",
+                            TextAlign = ContentAlignment.MiddleLeft,
+                            //Width = tabControlMain.Width/4,
+                            AutoEllipsis = true
+                        };
                         panel.SetColumn(l, 0);
                         panel.SetRow(l, i);
                         panel.Controls.Add(l);
 
                         Control t = null;
-                        var defaultValue = ini.GetSetting(section, option);
+                        var defaultValue = config.GetSetting(section, option);
                         var tooltip = "";
 
                         // Check previous comment
                         if (!String.IsNullOrEmpty(lastComment))
                         {
-                            var tmp = lastComment.Trim().Split(new[] {']'}, 2);
+                            var tmp = lastComment.Trim().Split(new[] { ']' }, 2);
 
                             if (tmp.Length > 1)
                                 tooltip = tmp[1].Trim();
 
-                            var m = Regex.Match(lastComment,@"\[(?<min>[-]?[\d.]{1,8}):(?<max>[-]?[\d.]{1,8})\]");
+                            var m = Regex.Match(lastComment, @"\[(?<min>[-]?[\d.]{1,8}):(?<max>[-]?[\d.]{1,8})\]");
                             if (m.Success)
                             {
                                 t = new NumericUpDown
-                                        {
-                                            Minimum = decimal.Parse(m.Groups["min"].Value),
-                                            Maximum = decimal.Parse(m.Groups["max"].Value),
-                                            Value = decimal.Parse(defaultValue)
-                                        };
+                                {
+                                    Minimum = decimal.Parse(m.Groups["min"].Value),
+                                    Maximum = decimal.Parse(m.Groups["max"].Value),
+                                    Value = decimal.Parse(defaultValue)
+                                };
+
+                                ((NumericUpDown)t).ValueChanged += (o, args) => { config.AddSetting(section, option, ((NumericUpDown)o).Value.ToString()); };
                             }
                             else
                             {
@@ -104,10 +123,10 @@ namespace RPICustomizer
                                         String name, value;
                                         if (v.Contains(':'))
                                         {
-                                            var parts = v.Split(new[] {':'}, 2);
+                                            var parts = v.Split(new[] { ':' }, 2);
                                             name = parts[1];
                                             value = parts[0];
-                                            description.Add(String.Format(" {0} ({1})",name,value));
+                                            description.Add(String.Format(" {0} ({1})", name, value));
                                         }
                                         else
                                         {
@@ -120,7 +139,7 @@ namespace RPICustomizer
 
                                         if (defaultValue.Equals(value))
                                         {
-                                            ((ComboBox) t).SelectedIndex = ((ComboBox) t).Items.Count-1;
+                                            ((ComboBox)t).SelectedIndex = ((ComboBox)t).Items.Count - 1;
                                         }
                                     }
 
@@ -134,19 +153,46 @@ namespace RPICustomizer
                                     t.Tag = items;
 
                                     // No default value match
-                                    if (((ComboBox) t).SelectedIndex < 0)
+                                    if (((ComboBox)t).SelectedIndex < 0)
                                     {
-                                        ((ComboBox) t).DropDownStyle = ComboBoxStyle.DropDown;
+                                        ((ComboBox)t).DropDownStyle = ComboBoxStyle.DropDown;
                                         t.Text = defaultValue;
                                     }
+
+                                    ((ComboBox)t).SelectedValueChanged += (o, args) =>
+                                    {
+                                        var c = o as ComboBox;
+                                        if (c != null)
+                                        {
+                                            string v = null;
+                                            if (c.Tag != null)
+                                            {
+                                                var list = c.Tag as List<string>;
+                                                if (list != null)
+                                                    v = list[c.SelectedIndex];
+                                            }
+                                            
+                                            if(v == null)
+                                                v = c.SelectedValue.ToString();
+
+                                            config.AddSetting(section, option, v);
+                                        }
+                                    };
                                 }
                             }
                         }
 
-                        if(t==null)
-                            t = new TextBox { Anchor = AnchorStyles.Top| AnchorStyles.Left| AnchorStyles.Right,
-                                Text = defaultValue/*, Width = (int) (tabControlMain.Width / 1.5)*/ };
-                        
+                        if (t == null)
+                        {
+                            t = new TextBox
+                            {
+                                Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
+                                Text = defaultValue /*, Width = (int) (tabControlMain.Width / 1.5)*/
+                            };
+
+                            t.TextChanged += (o, args) => { config.AddSetting(section, option, ((TextBox) o).Text); };
+                        }
+
                         panel.SetColumn(t, 1);
                         panel.SetRow(l, i++);
                         panel.Controls.Add(t);
@@ -162,6 +208,7 @@ namespace RPICustomizer
 
                 if (panel.Controls.Count > 0)
                 {
+                    panel.AutoScroll = true;
                     page.Controls.Add(panel);
                     tabControlMain.Controls.Add(page);
                 }
@@ -173,7 +220,47 @@ namespace RPICustomizer
             }
         }
 
-        private static string GetPrettyName(string p)
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var s = new SaveFileDialog();
+
+            if (s.ShowDialog() == DialogResult.OK)
+            {
+                config.SaveSettings(s.FileName);
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var cmd = commands.GetSetting("config", "set");
+            if (!String.IsNullOrEmpty(cmd))
+            {
+                try
+                {
+                    config.SaveSettings();
+                    var t = cmd.Replace("{config}", File.ReadAllText(config.ConfigurationFile).Replace("\"", "\\\""));
+
+                    _connection.RunCommand(t).Execute();
+                    _dirty = false;
+                }
+                catch
+                {
+                }
+            }
+
+            if (_dirty)
+                MessageBox.Show("Can't save in the remote device");
+        }
+    }
+
+    public class Utilities
+    {
+        internal static string GetPrettyName(string p)
         {
             if (p.Equals(Resources.IniParser_RootSection)) return "Main";
             var tmp = p.Trim().Replace("_", " ");

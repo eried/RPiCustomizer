@@ -54,6 +54,11 @@
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
+            // backgroundWorkerConnect
+            // 
+            this.backgroundWorkerConnect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerConnect_DoWork);
+            this.backgroundWorkerConnect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerConnect_RunWorkerCompleted);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -97,12 +102,14 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.saveToolStripMenuItem.Text = "&Save in remote device";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.exportToolStripMenuItem.Text = "&Export...";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -115,6 +122,7 @@
             this.quitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.quitToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
             this.quitToolStripMenuItem.Text = "&Close";
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // remoteToolStripMenuItem
             // 
@@ -195,6 +203,7 @@
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(380, 275);
             this.tabControlMain.TabIndex = 0;
+            this.tabControlMain.Visible = false;
             // 
             // FormEditor
             // 
