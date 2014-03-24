@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Cornmanthe3rd-Metronome-System-computer.ico</ApplicationIcon>
+    <ApplicationIcon>RaspberryPi.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -107,6 +107,7 @@
   <ItemGroup>
     <Content Include="Cornmanthe3rd-Metronome-System-computer.ico" />
     <Content Include="Double-J-Design-Apple-Festival-App-settings.ico" />
+    <Content Include="RaspberryPi.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
