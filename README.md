@@ -60,7 +60,7 @@ solver=java
 ;[some value:Default,some value:Other option,some value for another:Another] tooltip
 arguments=Default
 console_ready=Enter the image
-;[-10000;10000]
+;[-10000:10000]
 minimum_wait=2000
 ;Notice how the names of the settings is prettified automatically 
 service_url=http://f.cl...
