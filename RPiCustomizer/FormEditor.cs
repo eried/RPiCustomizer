@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using RPICustomizer.Properties;
 using Renci.SshNet;
+using ConfigurationParser;
 
 namespace RPICustomizer
 {
@@ -20,8 +21,8 @@ namespace RPICustomizer
         private readonly SshClient _connection;
         private readonly IPAddress _ip;
         private FormConnector _loader;
-        private IniParser commands;
-        private IniParser config;
+        private IniFile commands;
+        private IniFile config;
         private bool _dirty;
 
         public FormEditor(String configuration, SshClient connection)
@@ -40,11 +41,11 @@ namespace RPICustomizer
 
         private void backgroundWorkerConnect_DoWork(object sender, DoWorkEventArgs e)
         {
-            commands = new IniParser((String)e.Argument,true);
+            commands = new IniFile((String)e.Argument,true);
 
             var c = _connection.RunCommand(commands.GetSetting("config", "get"));
             c.Execute();
-            config = new IniParser(c.Result,true);
+            config = new IniFile(c.Result,true);
         }
 
         private void backgroundWorkerConnect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

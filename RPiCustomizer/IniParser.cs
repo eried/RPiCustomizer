@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using RPICustomizer.Properties;
 
-namespace RPICustomizer
+namespace ConfigurationParser
 {
     /// <summary>
     /// Source: http://bytes.com/topic/net/insights/797169-reading-parsing-ini-file-c
     /// </summary>
-    public class IniParser
+    public class IniFile
     {
         private readonly Dictionary<SectionPair, String> _keyPairs = new Dictionary<SectionPair, string>();
         private readonly String _iniFilePath;
@@ -24,37 +23,44 @@ namespace RPICustomizer
         /// <summary>
         /// Opens the INI file at the given path and enumerates the values in the IniParser.
         /// </summary>
-        /// <param name="iniPath">Full path to INI file.</param>
-        public IniParser(String iniPath, bool isContents)
+        /// <param name="ini">Path to INI file or INI contents.</param>
+        /// <param name="isContents"></param>
+        /// <param name="encoding">File encoding</param>
+        public IniFile(String ini, bool isContents = false, Encoding encoding=null)
         {
-            TextReader iniFile = null;
-            String strLine = null;
+            TextReader iniFile;
             String currentRoot = null;
-            String[] keyPair = null;
 
-            _iniFilePath = iniPath;
+            _iniFilePath = ini;
 
-            if (isContents || !File.Exists(iniPath))
+            if (!File.Exists(ini))
             {
-                iniFile = new StringReader((String) iniPath.Clone());
-                iniPath = Path.GetTempFileName();
-                ConfigurationFile = iniPath;
+                var tmp = Path.GetFullPath(ini);
+                if (!String.IsNullOrEmpty(tmp) && File.Exists(tmp))
+                    ini = tmp;
+            }
+
+            if (isContents || !File.Exists(ini))
+            {
+                iniFile = new StringReader((String) ini.Clone());
+                ini = Path.GetTempFileName();
+                ConfigurationFile = ini;
             }
             else
             {
-                iniFile = new StreamReader(iniPath, Encoding.Default);
-                ConfigurationFile = iniPath;
+                iniFile = new StreamReader(ini, encoding ?? Encoding.Default);
+                ConfigurationFile = ini;
             }
 
             try
             {
-                strLine = iniFile.ReadLine();
+                var strLine = iniFile.ReadLine();
 
                 while (strLine != null)
                 {
                     strLine = strLine.Trim();
 
-                    if (strLine != "")
+                    if (!strLine.StartsWith(";") && strLine.Length > 1)
                     {
                         if (strLine.StartsWith("[") && strLine.EndsWith("]"))
                         {
@@ -62,13 +68,10 @@ namespace RPICustomizer
                         }
                         else
                         {
-                            keyPair = strLine.Split(new char[] {'='}, 2);
+                            var keyPair = strLine.Split(new char[] {'='}, 2);
 
                             SectionPair sectionPair;
                             String value = null;
-
-                            if (currentRoot == null)
-                                currentRoot = Resources.IniParser_RootSection;
 
                             sectionPair.Section = currentRoot;
                             sectionPair.Key = keyPair[0];
@@ -76,16 +79,12 @@ namespace RPICustomizer
                             if (keyPair.Length > 1)
                                 value = keyPair[1];
 
-                            if (_keyPairs.ContainsKey(sectionPair))
-                                _keyPairs[sectionPair] = value;
-                            else
-                                _keyPairs.Add(sectionPair, value);
+                            _keyPairs.Add(sectionPair, value);
                         }
                     }
 
                     strLine = iniFile.ReadLine();
                 }
-
             }
             catch (Exception ex)
             {
@@ -93,8 +92,7 @@ namespace RPICustomizer
             }
             finally
             {
-                if (iniFile != null)
-                    iniFile.Close();
+                iniFile.Close();
             }
             /*}
             else
@@ -102,18 +100,23 @@ namespace RPICustomizer
 
         }
 
+        public IniFile()
+        {
+        }
+
         /// <summary>
         /// Returns the value for the given section, key pair.
         /// </summary>
-        /// <param name="sectionName">Section name.</param>
-        /// <param name="settingName">Key name.</param>
-        public String GetSetting(String sectionName, String settingName)
+        /// <param name="sectionName">Section name</param>
+        /// <param name="settingName">Key name</param>
+        /// <param name="defaultValue">Default value</param>
+        public String GetSetting(String sectionName, String settingName, String defaultValue=null)
         {
             SectionPair sectionPair;
             sectionPair.Section = sectionName;
             sectionPair.Key = settingName;
 
-            return (String)_keyPairs[sectionPair];
+            return _keyPairs.ContainsKey(sectionPair) ? _keyPairs[sectionPair] : defaultValue;
         }
 
         public IEnumerable<string> GetSections()
@@ -131,9 +134,9 @@ namespace RPICustomizer
         /// <param name="sectionName">Section to enum.</param>
         public String[] EnumSection(String sectionName)
         {
-            ArrayList tmpArray = new ArrayList();
+            var tmpArray = new ArrayList();
 
-            foreach (SectionPair pair in _keyPairs.Keys)
+            foreach (var pair in _keyPairs.Keys)
             {
                 if (pair.Section == sectionName)
                     tmpArray.Add(pair.Key);
@@ -191,25 +194,24 @@ namespace RPICustomizer
         /// <param name="newFilePath">New file path.</param>
         public void SaveSettings(String newFilePath)
         {
-            ArrayList sections = new ArrayList();
-            String tmpValue = "";
-            String strToSave = "";
+            var sections = new ArrayList();
+            var strToSave = "";
 
-            foreach (SectionPair sectionPair in _keyPairs.Keys)
+            foreach (var sectionPair in _keyPairs.Keys)
             {
                 if (!sections.Contains(sectionPair.Section))
                     sections.Add(sectionPair.Section);
             }
 
-            foreach (String section in sections)
+            foreach (var section in sections)
             {
                 strToSave += ("[" + section + "]\r\n");
 
-                foreach (SectionPair sectionPair in _keyPairs.Keys)
+                foreach (var sectionPair in _keyPairs.Keys)
                 {
-                    if (sectionPair.Section == section)
+                    if (sectionPair.Section == (string) section)
                     {
-                        tmpValue = (String)_keyPairs[sectionPair];
+                        var tmpValue = _keyPairs[sectionPair];
 
                         if (tmpValue != null)
                             tmpValue = "=" + tmpValue;
@@ -238,9 +240,22 @@ namespace RPICustomizer
         /// </summary>
         public void SaveSettings()
         {
-            SaveSettings(ConfigurationFile);
+            SaveSettings(_iniFilePath);
         }
 
         public string ConfigurationFile { get; set; }
+
+        public bool GetSettingAsBoolean(string sectionName, string settingName, bool defaultValue)
+        {
+            return GetSettingAsInteger(sectionName, settingName, defaultValue?1:0)==1;
+        }
+
+        public int GetSettingAsInteger(string sectionName, string settingName, int defaultValue)
+        {
+            var s = GetSetting(sectionName, settingName);
+            int r;
+
+            return int.TryParse(s,out r) ? r : defaultValue;
+        }
     }
 }
